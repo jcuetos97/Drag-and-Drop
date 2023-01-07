@@ -11,7 +11,7 @@ interface DragTarget {
 }
 
 // Project Type
-enum ProjectSatus {
+enum ProjectStatus {
   Active,
   Finished,
 }
@@ -23,7 +23,7 @@ class Project {
     public title: string,
     public description: string,
     public people: number,
-    public status: ProjectSatus
+    public status: ProjectStatus
   ) {}
 }
 
@@ -60,10 +60,23 @@ class ProjectState extends State<Project> {
       title,
       description,
       numOfPeople,
-      ProjectSatus.Active
+      ProjectStatus.Active
     );
 
     this.projects.push(newProject);
+    for (const listenerFn of this.listeners) {
+      listenerFn(this.projects.slice());
+    }
+  }
+
+  moveProject(projectId: string, newStatus: ProjectStatus) {
+    const project = this.projects.find((prj) => prj.id === projectId);
+    if (project) {
+      project.status = newStatus;
+    }
+  }
+
+  private updateListeners() {
     for (const listenerFn of this.listeners) {
       listenerFn(this.projects.slice());
     }
@@ -238,8 +251,13 @@ class ProjectList
     }
   }
 
+  @autobind
   dropHandler(event: DragEvent) {
-    console.log(event);
+    const prjId = event.dataTransfer!.getData('text/plain');
+    projectState.moveProject(
+      prjId,
+      this.type === 'active' ? ProjectStatus.Active : ProjectStatus.Finished
+    );
   }
 
   @autobind
@@ -256,9 +274,9 @@ class ProjectList
     projectState.addListener((projects: Project[]) => {
       const relevantProjects = projects.filter((project) => {
         if (this.type === 'active') {
-          return project.status === ProjectSatus.Active;
+          return project.status === ProjectStatus.Active;
         }
-        return project.status === ProjectSatus.Finished;
+        return project.status === ProjectStatus.Finished;
       });
 
       this.assignedProjects = relevantProjects;
