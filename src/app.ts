@@ -71,8 +71,9 @@ class ProjectState extends State<Project> {
 
   moveProject(projectId: string, newStatus: ProjectStatus) {
     const project = this.projects.find((prj) => prj.id === projectId);
-    if (project) {
+    if (project && project.status !== newStatus) {
       project.status = newStatus;
+      this.updateListeners();
     }
   }
 
@@ -268,8 +269,8 @@ class ProjectList
 
   configure() {
     this.element.addEventListener('dragover', this.dragOverHandler);
-    this.element.addEventListener('dragleave', this.dragOverHandler);
-    this.element.addEventListener('drop', this.dragOverHandler);
+    this.element.addEventListener('dragleave', this.dragLeaveHandler);
+    this.element.addEventListener('drop', this.dropHandler);
 
     projectState.addListener((projects: Project[]) => {
       const relevantProjects = projects.filter((project) => {

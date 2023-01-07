@@ -8,6 +8,7 @@ html {
 
 body {
   margin: 0;
+  margin-bottom: 25rem;
 }
 
 label,
@@ -53,6 +54,12 @@ button:hover,
 button:active {
   background: #a80041;
   border-color: #a80041;
+}
+
+.hero {
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .projects {
