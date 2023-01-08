@@ -1,18 +1,21 @@
 {
-  "name": "drag and drop",
+  "name": "drag-and-drop",
   "version": "1.0.0",
   "description": "Drag and Drop App",
   "main": "app.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "lite-server"
+    "start": "webpack-dev-server",
+    "build": "webpack --config webpack.config.prod.js"
   },
   "keywords": [
-    "typescript"
+    "typescript",
+    "course"
   ],
   "author": "Juan José Espinosa",
   "license": "ISC",
   "devDependencies": {
+    "clean-webpack-plugin": "^4.0.0",
     "lite-server": "^2.5.4",
     "ts-loader": "^9.4.2",
     "typescript": "^4.9.4",
